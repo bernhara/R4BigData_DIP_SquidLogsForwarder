@@ -1,0 +1,21 @@
+Host log-collector-*
+   User dip
+   IdentityFile ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-to-s-proxetnet
+   StrictHostKeyChecking no
+
+Host log-collector-lan
+   HostName s-proxetnet.home
+   Port 22
+
+Host log-collector-wan
+   HostName s-proxetnet.home
+   Port 22
+   User dip
+   ProxyCommand ssh s-m2m-gw "nc %h %p"
+
+Host s-m2m-gw
+   HostName s-m2m-gw.dtdns.net
+   Port 443
+   User dip
+   IdentityFile ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-to-s-proxetnet
+   StrictHostKeyChecking no
