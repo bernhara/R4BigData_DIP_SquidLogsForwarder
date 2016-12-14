@@ -16,7 +16,11 @@ fi
 
 date
 
+: ${src_log_dir:=/var/log/squid}
 
+chmod go-rwx ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-*
+
+ssh -vv log-collector-lan
 
 
 
