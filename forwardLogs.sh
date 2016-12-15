@@ -59,10 +59,4 @@ fi
 
 ${ssh_command} log-collector-lan "mkdir -p ${remote_destination_dir}"
 
-rsync -I --delete -a -vv -e "${ssh_command}" ${src_folder_to_copy} log-collector-lan:${remote_destination_dir}
-
-#!!! scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ~/R4BigData_DIP_SquidLogsForwarder/ssh-config "${src_folder_to_copy}"/* "log-collector-lan:${remote_destination_dir}"
-
-
-
-
+rsync -I --delete -a -v -e "${ssh_command}" ${src_folder_to_copy} log-collector-lan:${remote_destination_dir}
