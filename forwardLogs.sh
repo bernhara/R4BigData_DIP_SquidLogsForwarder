@@ -41,6 +41,7 @@ getMyDnsName () {
 
 date
 
+: ${ssh_command:=ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
 : ${src_folder_to_copy:=/var/log/squid3}
 
 chmod go-rwx ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-*
@@ -56,9 +57,9 @@ then
    exit 1
 fi
 
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ~/R4BigData_DIP_SquidLogsForwarder/ssh-config log-collector-lan "mkdir -p ${remote_destination_dir}"
+${ssh_command} log-collector-lan "mkdir -p ${remote_destination_dir}"
 
-rsync -I --delete -a -vv -e "ssh -vv -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null log-collector-lan:${remote_destination_dir}/" ${src_folder_to_copy}
+rsync -I --delete -a -vv -e "${ssh_command}" ${src_folder_to_copy} log-collector-lan:${remote_destination_dir}
 
 #!!! scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ~/R4BigData_DIP_SquidLogsForwarder/ssh-config "${src_folder_to_copy}"/* "log-collector-lan:${remote_destination_dir}"
 
