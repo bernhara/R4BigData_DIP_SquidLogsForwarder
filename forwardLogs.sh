@@ -3,6 +3,8 @@
 HERE=`dirname $0`
 CMD=`basename $0`
 
+remote_host_name="$1"
+
 : ${stdout_log_file:="${HERE}/${CMD}.stdout.log"}
 : ${stderr_log_file:="${HERE}/${CMD}.stderr.log"}
 
@@ -12,6 +14,13 @@ CMD=`basename $0`
 if ${redirect_output}
 then
     exec 1>"${stdout_log_file}" 2>"${stderr_log_file}"
+fi
+
+if [ -z "${remote_host_spec}" ]
+then
+	echo "ERROR: usage
+	$CMD <valid ssh host specification>" 1>&2
+	exit 1
 fi
 
 getMyDnsName () {
@@ -57,6 +66,6 @@ then
    exit 1
 fi
 
-${ssh_command} log-collector-lan "mkdir -p ${remote_destination_dir}"
+${ssh_command} ${remote_host_spec} "mkdir -p ${remote_destination_dir}"
 
-rsync -I --delete -a -v -e "${ssh_command}" ${src_folder_to_copy} log-collector-lan:${remote_destination_dir}
+rsync -I --delete -a -v -e "${ssh_command}" ${src_folder_to_copy} ${remote_host_spec}:${remote_destination_dir}
