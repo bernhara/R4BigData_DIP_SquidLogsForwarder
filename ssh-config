@@ -11,9 +11,9 @@ Host log-collector-wan
    HostName s-proxetnet.home
    Port 22
    User dip
-   ProxyCommand ssh s-m2m-gw "nc %h %p"
+   ProxyCommand ssh log-collector-public-sshd-server "nc %h %p"
 
-Host s-m2m-gw
+Host ssh log-collector-public-sshd-server
    HostName s-m2m-gw.dtdns.net
    Port 443
    User dip
