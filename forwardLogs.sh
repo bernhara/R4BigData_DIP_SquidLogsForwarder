@@ -39,6 +39,25 @@ getMyDnsName () {
     fi
 }
 
+getSquidLogFolder () {
+
+    known_log_dir="/var/log/squid3 /var/log/squid"
+    for log_dir in ${known_log_dir}
+    do
+	if [ -d "${log_dir}" ]
+	then
+	    echo "${log_dir}"
+	    return 0
+	fi
+    done
+
+    # if reache no log dir found
+
+    echo "ERROR: could not find any log dir out of ${known_log_dir}" 1>&2
+    exit 1
+}
+
+
 date
 
 # check if I am on a foreign net or not
@@ -56,8 +75,9 @@ fi
 
 
 : ${ssh_verbose_flag:=""}
-: ${ssh_command:=ssh ${ssh_verbose_flag} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
-: ${src_folder_to_copy:=/var/log/squid3}
+: ${ssh_command:=ssh ${ssh_verbose_flag} -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
+
+: ${src_folder_to_copy:=`getSquidLogFolder`}
 
 chmod go-rwx ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-*
 
