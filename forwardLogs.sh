@@ -3,18 +3,11 @@
 HERE=`dirname $0`
 CMD=`basename $0`
 
-remote_host_name="$1"
-
 : ${stdout_log_file:="${HERE}/${CMD}.stdout.log"}
 : ${stderr_log_file:="${HERE}/${CMD}.stderr.log"}
 
 
 : ${redirect_output:=true}
-
-if ${redirect_output}
-then
-    exec 1>"${stdout_log_file}" 2>"${stderr_log_file}"
-fi
 
 if [ -z "${remote_host_spec}" ]
 then
@@ -50,12 +43,24 @@ getMyDnsName () {
 
 date
 
+# check if I am on a foreign net or not
+collector_accespoint_dns_name='LPuteaux-657-1-23-37.w193-251.abo.wanadoo.fr.'
+
+my_name=`getMyDnsName`
+
+if [ "${my_name}" = "${collector_accespoint_dns_name}" ]
+then
+    ssh_remote_host_spec="log-collector-lan"
+else
+    ssh_remote_host_spec="log-collector-wan"
+fi
+    
+
+
 : ${ssh_command:=ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
 : ${src_folder_to_copy:=/var/log/squid3}
 
 chmod go-rwx ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-*
-
-my_name=`getMyDnsName`
 
 remote_destination_dir="~/CollectorIn/${my_name}"
 
@@ -66,6 +71,6 @@ then
    exit 1
 fi
 
-${ssh_command} ${remote_host_spec} "mkdir -p ${remote_destination_dir}"
+${ssh_command} ${ssh_remote_host_spec} "mkdir -p ${remote_destination_dir}"
 
-rsync -I --delete -a -v -e "${ssh_command}" ${src_folder_to_copy} ${remote_host_spec}:${remote_destination_dir}
+rsync -I --delete -a -v -e "${ssh_command}" ${src_folder_to_copy} ${ssh_remote_host_spec}:${remote_destination_dir}
