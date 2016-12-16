@@ -9,11 +9,9 @@ CMD=`basename $0`
 
 : ${redirect_output:=true}
 
-if [ -z "${remote_host_spec}" ]
+if ${redirect_output}
 then
-	echo "ERROR: usage
-	$CMD <valid ssh host specification>" 1>&2
-	exit 1
+    exec 1>"${stdout_log_file}" 2>"${stderr_log_file}"
 fi
 
 getMyDnsName () {
@@ -57,7 +55,8 @@ fi
     
 
 
-: ${ssh_command:=ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
+: ${ssh_verbose_flag:=""}
+: ${ssh_command:=ssh ${ssh_verbose_flag} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
 : ${src_folder_to_copy:=/var/log/squid3}
 
 chmod go-rwx ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-*
