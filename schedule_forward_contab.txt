@@ -1,1 +1,1 @@
-*/5 * * * *     ~/R4BigData_DIP_SquidLogsForwarder/forwardLogs.sh
+*/5 * * * *     ~/R4BigData_DIP_SquidLogsForwarder/forwardLogs.sh log-collector-wan
