@@ -1,0 +1,1 @@
+*/5 * * * *     ~/R4BigData_DIP_SquidLogsForwarder/forwardLogs.sh
