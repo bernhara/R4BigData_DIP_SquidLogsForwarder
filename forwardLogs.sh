@@ -65,16 +65,14 @@ getSquidLogFolder () {
 
 date
 
-# check if I am on a foreign net or not
-collector_accespoint_dns_name='LPuteaux-657-1-23-37.w193-251.abo.wanadoo.fr.'
-
 : ${my_name:=`getMyDnsName`}
+: ${use_collector_wan_address:=false}
 
-if [ "${my_name}" = "${collector_accespoint_dns_name}" ]
+if ${use_collector_wan_address}
 then
-    ssh_remote_host_spec="log-collector-lan"
-else
     ssh_remote_host_spec="log-collector-wan"
+else
+    ssh_remote_host_spec="log-collector-lan"
 fi
     
 
