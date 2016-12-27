@@ -1,0 +1,4 @@
+# used to overide shell vars for script forwardLogs.sh
+
+# example
+# my_name=s-m2m-gw.dtdns.net

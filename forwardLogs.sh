@@ -14,6 +14,11 @@ then
     exec 1>"${stdout_log_file}" 2>"${stderr_log_file}"
 fi
 
+if [ -r "${HERE}/${CMD}-config" ]
+then
+    . "${HERE}/${CMD}-config"
+fi
+
 getMyDnsName () {
 
     my_dns_name=""
@@ -63,7 +68,7 @@ date
 # check if I am on a foreign net or not
 collector_accespoint_dns_name='LPuteaux-657-1-23-37.w193-251.abo.wanadoo.fr.'
 
-my_name=`getMyDnsName`
+: ${my_name:=`getMyDnsName`}
 
 if [ "${my_name}" = "${collector_accespoint_dns_name}" ]
 then
