@@ -66,9 +66,9 @@ getSquidLogFolder () {
 date
 
 : ${my_name:=`getMyDnsName`}
-: ${use_collector_wan_address:=false}
+: ${connect_to_collector_using_wan_address:=false}
 
-if ${use_collector_wan_address}
+if ${connect_to_collector_using_wan_address}
 then
     ssh_remote_host_spec="log-collector-wan"
 else
