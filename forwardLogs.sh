@@ -96,5 +96,5 @@ fi
 ${ssh_command} ${ssh_remote_host_spec} "mkdir -p ${remote_destination_dir}"
 
 set -x
-rsync --delete -a -v -e "${ssh_command}" ${src_folder_to_copy} ${ssh_remote_host_spec}:${remote_destination_dir}
+rsync -vv -a --delete -e "${ssh_command}" ${src_folder_to_copy} ${ssh_remote_host_spec}:${remote_destination_dir}
 set +x
