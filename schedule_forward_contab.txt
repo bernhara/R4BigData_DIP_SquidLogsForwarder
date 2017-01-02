@@ -1,2 +1,2 @@
 # commands are run from home dir
-*/15 * * * *     ${HOME}/R4BigData_DIP_SquidLogsForwarder/forwardLogs.sh
+*/15 * * * *     ${HOME}/R4BigData_DIP_SquidLogsForwarder/utils/redirectOutput.sh ${HOME}/R4BigData_DIP_SquidLogsForwarder/forwardLogs.sh
