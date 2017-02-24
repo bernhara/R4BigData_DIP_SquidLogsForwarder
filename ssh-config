@@ -3,7 +3,7 @@ Host log-collector-*
    IdentityFile ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-to-s-proxetnet
    StrictHostKeyChecking no
    UserKnownHostsFile /dev/null
-   ConnectTimeout 3
+   ConnectTimeout 5
 
 Host log-collector-lan
    HostName s-proxetnet.home
