@@ -1,9 +1,17 @@
 # used to overide shell vars for script forwardLogs.sh
 
-# example
-# the name used to be identified remotely
+# Main configuration variables
+# ============================
+
+# "my_name" variable holds the name used to be this log producer (ie. squid logs) remotely
+# mainly for petuum workers
+# (logs will be collected remotely in a shared folder named "/xxx/${my_name}/"
+# this name should be unique, since all log collectors should be different
+ 
 # my_name=s-m2m-gw.dtdns.net
 
+# "connect_to_collector_using_wan_address" boolean variable tells if log forwarder is connected on the same LAN
+# than the remote collector
+# default value is false
 #
-# to connect to collected, use a public WAN address or a local LAN address
 # connect_to_collector_using_wan_address=false
