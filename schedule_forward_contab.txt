@@ -1,2 +1,5 @@
+# force logs to be redirected to /tmp, to prevent writings on the SD card
+stdout_log_file=/tmp/forwardLogs.sh.stdout.log
+stderr_log_file=/tmp/forwardLogs.sh.stderr.log
 # commands are run from home dir
 */15 * * * *     ${HOME}/R4BigData_DIP_SquidLogsForwarder/utils/redirectOutput.sh ${HOME}/R4BigData_DIP_SquidLogsForwarder/forwardLogs.sh
