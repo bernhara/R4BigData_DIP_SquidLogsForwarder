@@ -33,6 +33,28 @@ getMyDnsName () {
     fi
 }
 
+getMyMacAddress () {
+
+    default_result="_UNDEFINED_MAC_ADDRESS_"
+
+    my_mac_address=""
+
+    mac_address_system_file="/sys/class/net/${interface_for_indentification}/address"
+    if [ -r "${mac_address_system_file}" ]
+    then
+	my_mac_address=`cat "${mac_address_system_file}"`
+    fi
+
+    if [ -n "${my_mac_address}" ]
+    then
+	echo "${my_mac_address}"
+	return 1
+    else
+	echo "${default_result}"
+	return 0
+    fi
+}
+
 getSquidLogFolder () {
 
     known_log_dir="/var/log/squid3 /var/log/squid"
@@ -54,7 +76,14 @@ getSquidLogFolder () {
 
 date
 
-: ${my_name:=`getMyDnsName`}
+: ${interface_for_indentification:="eth0"}
+
+if [ -z "${my_name}" ]
+then
+    # no name has been forced => use eth if MAC address
+    my_name=`getMyMacAddress`
+fi
+
 : ${connect_to_collector_using_wan_address:=false}
 
 if ${connect_to_collector_using_wan_address}
