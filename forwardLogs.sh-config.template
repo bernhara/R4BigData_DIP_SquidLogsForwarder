@@ -3,12 +3,20 @@
 # Main configuration variables
 # ============================
 
+# ----
+
 # "my_name" variable holds the name used to be this log producer (ie. squid logs) remotely
 # mainly for petuum workers
 # (logs will be collected remotely in a shared folder named "/xxx/${my_name}/"
 # this name should be unique, since all log collectors should be different
+#
+# Example:
+#    my_name=s-m2m-gw.dtdns.net
+#
+# As default, the host Mac address is used to set this identifier.
+# So you may set "my_name" only if the Mac address does not supply to your needs
  
-# my_name=s-m2m-gw.dtdns.net
+# ----
 
 # "connect_to_collector_using_wan_address" boolean variable tells if this log forwarder should consider that 
 # it is on a different LAN than the remote collector, and connect to the collector using it's "public" address
