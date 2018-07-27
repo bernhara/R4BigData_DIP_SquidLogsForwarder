@@ -15,6 +15,6 @@ Host log-collector-wan
    ProxyCommand ssh -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config log-collector-public-sshd-server "nc %h %p"
 
 Host ssh log-collector-public-sshd-server
-   HostName s-m2m-gw.dtdns.net
+   HostName s-m2mgw.sytes.net
    Port 443
    IdentityFile ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-to-s-proxetnet
