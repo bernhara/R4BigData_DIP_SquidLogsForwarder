@@ -8,6 +8,11 @@ then
     . "${HERE}/${CMD}-config"
 fi
 
+: ${collector_lan_hostname:=proxenet.home}
+: ${collector_lan_sshd_port:=22}
+: ${collector_reverse_gateway_hostname:=s-m2m-gw.ow.integ.dns-orange.fr}
+: ${collector_reverse_gateway_sshd_port:=443}
+
 getMyDnsName () {
 
     my_dns_name=""
@@ -84,23 +89,38 @@ then
     my_name=$( getMyMacAddress )
 fi
 
+#
+# ssh configuration
+#
+
 : ${connect_to_collector_using_wan_address:=false}
+
+: ${ssh_verbose_flag:=""}
+
+ssh_common_options=${ssh_verbose_flag}
+ssh_common_options=${ssh_common_options}' -o User=dip'
+ssh_common_options=${ssh_common_options}' -o StrictHostKeyChecking=no'
+ssh_common_options=${ssh_common_options}' -o UserKnownHostsFile=/dev/null'
+ssh_common_options=${ssh_common_options}' -o ConnectTimeout=5'
+
+ssh_options="${ssh_common_options}"
 
 if ${connect_to_collector_using_wan_address}
 then
-    ssh_remote_host_spec="log-collector-wan"
+    tmp_ssh_key_file=$( mktemp )
+    trap "rm -f ${tmp_ssh_key_file}" 0
+    cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
+    chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
+
+    proxy_command="ssh ${ssh_common_options} -i ${tmp_ssh_key_file} -p ${collector_reverse_gateway_sshd_port} ${collector_reverse_gateway_hostname} nc ${collector_lan_hostname} ${collector_lan_sshd_port}"
+    ssh_options=${ssh_options}' -o "'ProxyCommand=${proxy_command}'"'
+
+    ssh_command="ssh ${ssh_options} ${collector_reverse_gateway_hostname}"
 else
-    ssh_remote_host_spec="log-collector-lan"
+
+    ssh_command="ssh ${ssh_options} s-proxetnet.home"
 fi
-    
 
-tmp_ssh_key_file=$( mktemp )
-trap "rm -f ${tmp_ssh_key_file}" 0
-cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
-chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
-
-: ${ssh_verbose_flag:=""}
-: ${ssh_command:=ssh ${ssh_verbose_flag} -i "${tmp_ssh_key_file}" -F ${HERE}/ssh-config}
 
 : ${src_folder_to_copy:=$( getSquidLogFolder )}
 
