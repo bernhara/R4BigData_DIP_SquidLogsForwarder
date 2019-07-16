@@ -8,7 +8,7 @@ then
     . "${HERE}/${CMD}-config"
 fi
 
-: ${collector_lan_hostname:=proxenet.home}
+: ${collector_lan_hostname:=s-proxenet.home}
 : ${collector_lan_sshd_port:=22}
 : ${collector_reverse_gateway_hostname:=s-m2m-gw.ow.integ.dns-orange.fr}
 : ${collector_reverse_gateway_sshd_port:=443}
@@ -113,13 +113,10 @@ then
     chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
 
     proxy_command="ssh ${ssh_common_options} -i ${tmp_ssh_key_file} -p ${collector_reverse_gateway_sshd_port} ${collector_reverse_gateway_hostname} nc ${collector_lan_hostname} ${collector_lan_sshd_port}"
-    ssh_options=${ssh_options}' -o "'ProxyCommand=${proxy_command}'"'
+    ssh_options=${ssh_options}" -o ProxyCommand="${proxy_command}""
 
-    ssh_command="ssh ${ssh_options} ${collector_reverse_gateway_hostname}"
-else
-
-    ssh_command="ssh ${ssh_options} s-proxetnet.home"
 fi
+ssh_command="ssh ${ssh_options} ${collector_lan_hostname}
 
 
 : ${src_folder_to_copy:=$( getSquidLogFolder )}
