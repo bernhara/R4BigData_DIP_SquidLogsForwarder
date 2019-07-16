@@ -81,7 +81,7 @@ date
 if [ -z "${my_name}" ]
 then
     # no name has been forced => use eth if MAC address
-    my_name=`getMyMacAddress`
+    my_name=$( getMyMacAddress )
 fi
 
 : ${connect_to_collector_using_wan_address:=false}
@@ -95,12 +95,14 @@ fi
     
 
 
+tmp_ssh_key_file=$( mktemp )
+cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
+chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
+
 : ${ssh_verbose_flag:=""}
-: ${ssh_command:=ssh ${ssh_verbose_flag} -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
+: ${ssh_command:=ssh ${ssh_verbose_flag} -i "${tmp_ssh_key_file}" -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
 
-: ${src_folder_to_copy:=`getSquidLogFolder`}
-
-chmod go-rwx ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-*
+: ${src_folder_to_copy:=$( getSquidLogFolder )}
 
 remote_destination_dir="~/CollectorIn/${my_name}"
 
