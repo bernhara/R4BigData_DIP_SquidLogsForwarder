@@ -33,6 +33,8 @@ getMyDnsName () {
     fi
 }
 
+: ${interface_for_indentification:=$(/sbin/ip route | awk '/default/ { print $5 }' )}
+
 getMyMacAddress () {
 
     default_result="_UNDEFINED_MAC_ADDRESS_"
@@ -75,8 +77,6 @@ getSquidLogFolder () {
 
 
 date
-
-: ${interface_for_indentification:="eth0"}
 
 if [ -z "${my_name}" ]
 then
