@@ -97,22 +97,29 @@ fi
 
 : ${ssh_verbose_flag:=""}
 
+
 ssh_common_options="${ssh_verbose_flag}"
 ssh_common_options="${ssh_common_options} -o User=dip"
 ssh_common_options="${ssh_common_options} -o StrictHostKeyChecking=no"
 ssh_common_options="${ssh_common_options} -o UserKnownHostsFile=/dev/null"
 ssh_common_options="${ssh_common_options} -o ConnectTimeout=5"
 
+
+# Add ID key 
+tmp_ssh_key_file=$( mktemp )
+trap "rm -f ${tmp_ssh_key_file}" 0
+cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
+chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
+
+ssh_common_options="${ssh_common_options} -i ${tmp_ssh_key_file}"
+
+
+
 ssh_options=${ssh_common_options}
 
 if ${connect_to_collector_using_wan_address}
 then
-    tmp_ssh_key_file=$( mktemp )
-    trap "rm -f ${tmp_ssh_key_file}" 0
-    cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
-    chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
-
-    proxy_command="ssh ${ssh_common_options} -i ${tmp_ssh_key_file} -p ${collector_reverse_gateway_sshd_port} ${collector_reverse_gateway_hostname} nc ${collector_lan_hostname} ${collector_lan_sshd_port}"
+    proxy_command="ssh ${ssh_common_options} -p ${collector_reverse_gateway_sshd_port} ${collector_reverse_gateway_hostname} nc ${collector_lan_hostname} ${collector_lan_sshd_port}"
     ssh_options="${ssh_options} -o ProxyCommand=\"${proxy_command}\""
 
 fi
