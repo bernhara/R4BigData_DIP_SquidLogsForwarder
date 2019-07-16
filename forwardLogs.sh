@@ -133,5 +133,5 @@ fi
 eval ${ssh_command} \"mkdir -p ${remote_destination_dir}\"
 
 set -x
-rsync -vv -a --delete -e "${ssh_command}" ${src_folder_to_copy} ${localhost}:${remote_destination_dir}
+rsync -vv -a --delete -e "${ssh_command}" ${src_folder_to_copy} :${remote_destination_dir}
 set +x
