@@ -94,8 +94,8 @@ else
 fi
     
 
-
 tmp_ssh_key_file=$( mktemp )
+trap "rm -f ${tmp_ssh_key_file}" 0
 cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
 chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
 
