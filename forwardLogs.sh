@@ -100,7 +100,7 @@ cp "${HERE}/ssh-key-to-s-proxetnet" "${tmp_ssh_key_file}"
 chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
 
 : ${ssh_verbose_flag:=""}
-: ${ssh_command:=ssh ${ssh_verbose_flag} -i "${tmp_ssh_key_file}" -F ${HOME}/R4BigData_DIP_SquidLogsForwarder/ssh-config}
+: ${ssh_command:=ssh ${ssh_verbose_flag} -i "${tmp_ssh_key_file}" -F ${HERE}/ssh-config}
 
 : ${src_folder_to_copy:=$( getSquidLogFolder )}
 
