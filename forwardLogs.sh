@@ -8,7 +8,7 @@ then
     . "${HERE}/${CMD}-config"
 fi
 
-: ${collector_lan_hostname:=s-proxenet.home}
+: ${collector_lan_hostname:=s-proxetnet.home}
 : ${collector_lan_sshd_port:=22}
 : ${collector_reverse_gateway_hostname:=s-m2m-gw.ow.integ.dns-orange.fr}
 : ${collector_reverse_gateway_sshd_port:=443}
