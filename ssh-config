@@ -1,6 +1,5 @@
 Host log-collector-*
    User dip
-   IdentityFile ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-to-s-proxetnet
    StrictHostKeyChecking no
    UserKnownHostsFile /dev/null
    ConnectTimeout 5
@@ -17,4 +16,3 @@ Host log-collector-wan
 Host ssh log-collector-public-sshd-server
    HostName s-m2mgw.sytes.net
    Port 443
-   IdentityFile ~/R4BigData_DIP_SquidLogsForwarder/ssh-key-to-s-proxetnet
