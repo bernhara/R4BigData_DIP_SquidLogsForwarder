@@ -8,10 +8,10 @@ then
     . "${HERE}/${CMD}-config"
 fi
 
-: ${collector_lan_hostname:=s-proxetnet.home}
-: ${collector_lan_sshd_port:=22}
-: ${collector_reverse_gateway_hostname:=s-m2m-gw.ow.integ.dns-orange.fr}
-: ${collector_reverse_gateway_sshd_port:=443}
+: ${collector_lan_hostname:="s-proxetnet.home"}
+: ${collector_lan_sshd_port:="22"}
+: ${collector_reverse_gateway_hostname:="s-m2m-gw.ow.integ.dns-orange.fr"}
+: ${collector_reverse_gateway_sshd_port:="443"}
 
 getMyDnsName () {
 
@@ -97,13 +97,13 @@ fi
 
 : ${ssh_verbose_flag:=""}
 
-ssh_common_options=${ssh_verbose_flag}
-ssh_common_options=${ssh_common_options}' -o User=dip'
-ssh_common_options=${ssh_common_options}' -o StrictHostKeyChecking=no'
-ssh_common_options=${ssh_common_options}' -o UserKnownHostsFile=/dev/null'
-ssh_common_options=${ssh_common_options}' -o ConnectTimeout=5'
+ssh_common_options="${ssh_verbose_flag}"
+ssh_common_options="${ssh_common_options} -o User=dip"
+ssh_common_options="${ssh_common_options} -o StrictHostKeyChecking=no"
+ssh_common_options="${ssh_common_options} -o UserKnownHostsFile=/dev/null"
+ssh_common_options="${ssh_common_options} -o ConnectTimeout=5"
 
-ssh_options="${ssh_common_options}"
+ssh_options=${ssh_common_options}
 
 if ${connect_to_collector_using_wan_address}
 then
@@ -113,24 +113,24 @@ then
     chmod u+r,u-wx,go-rwx "${tmp_ssh_key_file}"
 
     proxy_command="ssh ${ssh_common_options} -i ${tmp_ssh_key_file} -p ${collector_reverse_gateway_sshd_port} ${collector_reverse_gateway_hostname} nc ${collector_lan_hostname} ${collector_lan_sshd_port}"
-    ssh_options=${ssh_options}" -o ProxyCommand="${proxy_command}""
+    ssh_options="${ssh_options} -o ProxyCommand=\"${proxy_command}\""
 
 fi
-ssh_command="ssh ${ssh_options} ${collector_lan_hostname}
+ssh_command="ssh ${ssh_options} ${collector_lan_hostname}"
 
 
 : ${src_folder_to_copy:=$( getSquidLogFolder )}
 
-remote_destination_dir="~/CollectorIn/${my_name}"
+remote_destination_dir="CollectorIn/${my_name}"
 
-src_file_list=`echo ${src_folder_to_copy}/* 2>/dev/null`
+src_file_list=$( echo ${src_folder_to_copy}/* 2>/dev/null )
 
 if [ -z "${src_file_list}" ]
 then
    exit 1
 fi
 
-${ssh_command} ${ssh_remote_host_spec} "mkdir -p ${remote_destination_dir}"
+eval ${ssh_command} \"mkdir -p ${remote_destination_dir}\"
 
 set -x
 rsync -vv -a --delete -e "${ssh_command}" ${src_folder_to_copy} ${ssh_remote_host_spec}:${remote_destination_dir}
