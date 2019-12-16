@@ -1,3 +1,7 @@
+# -*- mode: text -*-
+#
+# This file is intended to be copied to copied to /etc/cron.d
+#
 SHELL=/bin/bash
 # force logs to be redirected to /tmp, to prevent writings on the SD card
 stdout_log_file=/tmp/forwardLogs.sh.stdout.log
